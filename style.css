@@ -1,0 +1,62 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+body{
+    max-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right bottom,#ffa585,#45c5d8);
+    color: #fff;
+}
+.container{
+    border: 0.5px solid #fff;
+    border-radius: 10px;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    box-shadow: 8px 8px 4px #909090,8px 8px 0px #575757;
+}
+.container h1{
+    font-size: 1.5rem;
+    margin-block: 10px;
+}
+.passbox{
+    background-color: #fff;
+    border: none;
+    outline: none;
+    padding: 10px;
+    width: 300px;
+    font-size: 20px;
+    border-radius: 0.5rem;
+    margin-block: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
