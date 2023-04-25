@@ -19,7 +19,7 @@ genbtn.addEventListener('click',()=>{
 // Function to generate password
 function generatePassword(){
     let genPassword="";
-    genPassword = math.random() *2;
+    genPassword = math.random() *5;
     return genPassword;
 }
 
