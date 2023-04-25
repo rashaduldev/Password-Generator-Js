@@ -55,7 +55,7 @@ copyicon.addEventListener('click',()=>{
         copyicon.innerText="check";
         copyicon.title="password.copied";
         setTimeout(()=>{
-            copyicon.innerHTML = "content_copy";
+            copyicon.innerText = "content_copy";
             copyicon.title = "";
         }, 2000)
     }
