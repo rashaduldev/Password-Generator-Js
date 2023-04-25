@@ -13,6 +13,7 @@ inputslider.addEventListener('input', ()=>{
     slidervalue.textContent=inputslider.value;
 })    
 // slider value end
+
 genbtn.addEventListener('click',()=>{
     passbox.value=generatePassword();
 })
