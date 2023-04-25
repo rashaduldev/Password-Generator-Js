@@ -19,9 +19,9 @@ genbtn.addEventListener('click',()=>{
 })
 // Function to generate password
 function generatePassword(){
-    let genPassword="";
-    genPassword = math.random() *5;
-    return genPassword;
+    let genbtn="";
+    genbtn = math.floor(math.random());
+    return genbtn;
 }
 
 
