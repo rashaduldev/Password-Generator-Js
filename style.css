@@ -36,6 +36,18 @@ body{
     border-radius: 0.5rem;
     margin-block: 10px;
 }
+.row{
+    display: flex;
+    margin-block: 8px;
+}
+.row p, .row label{
+    flex-basis: 100%;
+    font-size: 18px;
+}
+.row input [type="checkbox"]{
+    width: 20px;
+    height: 20px;
+}
 
 
 
