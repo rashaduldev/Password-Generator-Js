@@ -1,48 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="style.css">
-    <title>Password Generator | Javascript</title>
-    <link rel="icon" href="password generator.png">
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Password Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-<body>
-    <div class="container">
-        <h1>Password Generator</h1>
-        <div class="inputbox">
-            <input type="text" name="" class="passbox" id="passbox" disabled>
-            <span class="material-symbols-outlined" id="copyicon"> content_copy
-                </span>
-        </div>
-        <input type="range" min="1" max="50" value="7" id="inputslider">
-        <div class="row">
-           <b>Password Length</b>
-            <span id="slidervalue"></span>
-        </div>
-        <div class="row">
-            <label for="lowercase">Include Lowercase Letter (a-z)</label>
-            <input type="checkbox" name="lowercase" id="lowercase">
-        </div>
-        <div class="row">
-            <label for="upperercase">Include Uppercase Letter (A-Z)</label>
-            <input type="checkbox" name="Upercase" id="uppercase">
-        </div>
-        <div class="row">
-            <label for="numbers">Include numbers (0-9)</label>
-            <input type="checkbox" name="lowercase" id="numbers">
-        </div>
-        <div class="row">
-            <label for="symbols">Include symbols (@-*)</label>
-            <input type="checkbox" name="lowercase" id="symbols">
-        </div>
-        <button type="button" class="genbtn" id="genbtn">Generate Password</button>
+
+<body
+  class="bg-gradient-to-br from-orange-200 via-pink-100 to-cyan-200 text-gray-900 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+
+  <div class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6 space-y-6">
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <h1 id="title" class="text-2xl font-bold text-gray-900">🔐 Password Generator</h1>
+      <div class="flex items-center gap-2">
+        <select id="langSelector" class="bg-gray-200 text-gray-900 text-sm p-1 rounded">
+          <option value="en">English</option>
+          <option value="bn">বাংলা</option>
+        </select>
+      </div>
     </div>
 
-    <script src="password.js"></script>
-    
+    <!-- Input & Copy -->
+    <div class="relative">
+      <input id="passbox" type="text"
+        class="w-full px-4 py-2 rounded border border-gray-300 text-gray-900 bg-gray-100"
+        disabled />
+      <span id="copyicon"
+        class="absolute top-2 right-2 text-gray-600 cursor-pointer material-symbols-outlined">content_copy</span>
+    </div>
+
+    <!-- Slider -->
+    <div>
+      <input type="range" id="inputslider" min="4" max="32" value="12" class="w-full text-blue-600">
+      <div class="flex justify-between text-sm mt-1 text-gray-700">
+        <span id="length-label">Password Length</span>
+        <span id="slidervalue">12</span>
+      </div>
+    </div>
+
+    <!-- Checkboxes -->
+    <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+      <label><input type="checkbox" id="lowercase" checked class="mr-2 text-blue-600"> Lowercase (a-z)</label>
+      <label><input type="checkbox" id="uppercase" checked class="mr-2 text-blue-600"> Uppercase (A-Z)</label>
+      <label><input type="checkbox" id="numbers" checked class="mr-2 text-blue-600"> Numbers (0-9)</label>
+      <label><input type="checkbox" id="symbols" checked class="mr-2 text-blue-600"> Symbols (@#$)</label>
+    </div>
+
+    <!-- Strength Bar -->
+    <div class="mt-2">
+      <div class="h-2 rounded bg-gray-300">
+        <div id="strength-fill" class="h-full w-1/3 bg-red-500 rounded transition-all duration-300"></div>
+      </div>
+      <p id="strength-label" class="text-sm mt-1 text-gray-700">Strength: Weak</p>
+    </div>
+
+    <!-- Password Strength Tips -->
+    <div>
+      <h2 id="strength-tips-title" class="text-lg font-semibold text-gray-900">Password Strength Tips</h2>
+      <ul id="strength-tips-list" class="list-disc pl-5 text-sm text-gray-700"></ul>
+    </div>
+
+    <!-- Generate Button -->
+    <button id="genbtn"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded font-semibold">Generate Password</button>
+
+    <!-- History -->
+    <div>
+      <h2 id="recent-title" class="text-lg font-semibold text-gray-900">Recent Passwords</h2>
+      <ul id="historyList" class="list-disc pl-5 text-sm text-gray-700"></ul>
+    </div>
+
+    <!-- Rules -->
+    <div>
+      <h2 id="tips-title" class="text-lg font-semibold text-gray-900">Password Tips</h2>
+      <ul id="tips-list" class="list-disc pl-5 text-sm text-gray-700">
+        <li id="tip1">Use a mix of upper/lowercase letters</li>
+        <li id="tip2">Include numbers and special characters</li>
+        <li id="tip3">Minimum 8 characters for better security</li>
+      </ul>
+    </div>
+
+    <!-- Download -->
+    <button id="downloadCSV"
+      class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Download CSV</button>
+  </div>
+
+  <script>
+    const inputslider = document.getElementById("inputslider");
+    const slidervalue = document.getElementById("slidervalue");
+    const passbox = document.getElementById("passbox");
+    const lowercase = document.getElementById("lowercase");
+    const uppercase = document.getElementById("uppercase");
+    const numbers = document.getElementById("numbers");
+    const symbols = document.getElementById("symbols");
+    const genbtn = document.getElementById("genbtn");
+    const copyicon = document.getElementById("copyicon");
+    const historyList = document.getElementById("historyList");
+    const strengthFill = document.getElementById("strength-fill");
+    const strengthLabel = document.getElementById("strength-label");
+    const strengthTipsList = document.getElementById("strength-tips-list");
+    const downloadCSV = document.getElementById("downloadCSV");
+    const langSelector = document.getElementById("langSelector");
+
+    let history = [];
+
+    // Update slider label
+    slidervalue.textContent = inputslider.value;
+    inputslider.addEventListener("input", () => {
+      slidervalue.textContent = inputslider.value;
+    });
+
+    // Generate Password
+    genbtn.addEventListener("click", () => {
+      const password = generatePassword();
+      passbox.value = password;
+      updateStrength(password);
+      updateHistory(password);
+      updateStrengthTips(password);
+    });
+
+    function generatePassword() {
+      const lowerChars = "abcdefghijklmnopqrstuvwxyz";
+      const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const allNumbers = "0123456789";
+      const allSymbols = "~!@#$%^&*";
+      let allChars = [];
+      let password = "";
+
+      if (lowercase.checked) allChars.push(lowerChars);
+      if (uppercase.checked) allChars.push(upperChars);
+      if (numbers.checked) allChars.push(allNumbers);
+      if (symbols.checked) allChars.push(allSymbols);
+
+      if (allChars.length === 0) return "";
+
+      allChars.forEach(set => {
+        password += set[Math.floor(Math.random() * set.length)];
+      });
+
+      while (password.length < inputslider.value) {
+        const set = allChars[Math.floor(Math.random() * allChars.length)];
+        password += set[Math.floor(Math.random() * set.length)];
+      }
+
+      return password.split('').sort(() => Math.random() - 0.5).join('');
+    }
+
+    function updateStrength(password) {
+      let score = 0;
+      if (/[a-z]/.test(password)) score++;
+      if (/[A-Z]/.test(password)) score++;
+      if (/[0-9]/.test(password)) score++;
+      if (/[^A-Za-z0-9]/.test(password)) score++;
+
+      let width = ["w-1/4", "w-2/4", "w-3/4", "w-full"];
+      let color = ["bg-red-500", "bg-yellow-400", "bg-green-400", "bg-green-600"];
+      let text = ["Weak", "Medium", "Strong", "Very Strong"];
+
+      strengthFill.className = `h-full rounded transition-all duration-300 ${width[score - 1] || "w-0"} ${color[score - 1] || ""}`;
+      strengthLabel.textContent = `Strength: ${text[score - 1] || "Too Weak"}`;
+    }
+
+    function updateStrengthTips(password) {
+      const tips = [];
+      if (!/[a-z]/.test(password)) tips.push("Add lowercase letters for better security");
+      if (!/[A-Z]/.test(password)) tips.push("Add uppercase letters for stronger password");
+      if (!/[0-9]/.test(password)) tips.push("Include numbers to increase complexity");
+      if (!/[^A-Za-z0-9]/.test(password)) tips.push("Use special characters (e.g., @#$%) for added strength");
+      if (password.length < 8) tips.push("Increase length to at least 8 characters");
+      if (tips.length === 0) tips.push("Your password is strong!");
+
+      strengthTipsList.innerHTML = "";
+      tips.forEach(tip => {
+        const li = document.createElement("li");
+        li.textContent = tip;
+        strengthTipsList.appendChild(li);
+      });
+    }
+
+    function updateHistory(password) {
+      history.unshift(password);
+      if (history.length > 5) history.pop();
+
+      historyList.innerHTML = "";
+      history.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = p;
+        historyList.appendChild(li);
+      });
+    }
+
+    copyicon.addEventListener("click", () => {
+      if (passbox.value) {
+        navigator.clipboard.writeText(passbox.value);
+        copyicon.textContent = "check";
+        setTimeout(() => copyicon.textContent = "content_copy", 2000);
+      }
+    });
+
+    downloadCSV.addEventListener("click", () => {
+      if (history.length === 0) return;
+      let csv = "data:text/csv;charset=utf-8," + history.join("\n");
+      const encoded = encodeURI(csv);
+      const link = document.createElement("a");
+      link.setAttribute("href", encoded);
+      link.setAttribute("download", "password_history.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Language translations
+    const translations = {
+      en: {
+        title: "🔐 Password Generator",
+        "length-label": "Password Length",
+        "strength-label": "Strength: Weak",
+        "strength-tips-title": "Password Strength Tips",
+        "recent-title": "Recent Passwords",
+        "tips-title": "Password Tips",
+        "tip1": "Use a mix of upper/lowercase letters",
+        "tip2": "Include numbers and special characters",
+        "tip3": "Minimum 8 characters for better security"
+      },
+      bn: {
+        title: "🔐 পাসওয়ার্ড জেনারেটর",
+        "length-label": "পাসওয়ার্ডের দৈর্ঘ্য",
+        "strength-label": "শক্তি: দুর্বল",
+        "strength-tips-title": "পাসওয়ার্ডের শক্তি টিপস",
+        "recent-title": "সাম্প্রতিক পাসওয়ার্ড",
+        "tips-title": "পাসওয়ার্ড টিপস",
+        "tip1": "বড়/ছোট অক্ষরের মিশ্রণ ব্যবহার করুন",
+        "tip2": "সংখ্যা ও বিশেষ চিহ্ন যোগ করুন",
+        "tip3": "ভালো নিরাপত্তার জন্য কমপক্ষে ৮ অক্ষর ব্যবহার করুন"
+      }
+    };
+
+    // Sync language on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem("language") || "en";
+      langSelector.value = savedLang;
+      applyLanguage(savedLang);
+    });
+
+    langSelector.addEventListener("change", () => {
+      const lang = langSelector.value;
+      localStorage.setItem("language", lang);
+      applyLanguage(lang);
+    });
+
+    function applyLanguage(lang) {
+      const data = translations[lang];
+      for (let key in data) {
+        const el = document.getElementById(key);
+        if (el) el.textContent = data[key];
+      }
+    }
+  </script>
 </body>
+
 </html>
