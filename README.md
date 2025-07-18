@@ -2,6 +2,14 @@
 
 A simple, responsive password generator built with HTML, JavaScript, and Tailwind CSS. Create secure passwords with customizable options and switch between English and Bengali languages.
 
+![Old UI](./img/old-ux.png)
+*Old UI – Classic and basic interface*
+
+![New UI](./img/new-ux.png)
+*New UI – Modern, sleek and fully responsive with Tailwind CSS*
+
+---
+
 ## বাংলা ওভারভিউ
 
 HTML, JavaScript এবং Tailwind CSS দিয়ে তৈরি একটি সহজ, রেসপনসিভ পাসওয়ার্ড জেনারেটর। কাস্টমাইজযোগ্য অপশন সহ নিরাপদ পাসওয়ার্ড তৈরি করুন এবং ইংরেজি ও বাংলা ভাষার মধ্যে সুইচ করুন।
