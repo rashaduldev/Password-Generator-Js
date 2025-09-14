@@ -1,12 +1,11 @@
 # 🔐 Password Generator
 
 A simple, responsive password generator built with HTML, JavaScript, and Tailwind CSS. Create secure passwords with customizable options and switch between English and Bengali languages.
+![New UI](./img/new-ux.png)
+*New UI – Modern, sleek and fully responsive with Tailwind CSS*\
 
 ![Old UI](./img/old-ux.png)
 *Old UI – Classic and basic interface*
-
-![New UI](./img/new-ux.png)
-*New UI – Modern, sleek and fully responsive with Tailwind CSS*
 
 ---
 
